@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: ngninx
+    meta.helm.sh/release-namespace: default
+  labels:
+    app.kubernetes.io/instance: ngninx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ngninx-nginx-ingress
+  name: nginx-config
+  namespace: nginx
+data:
+  log-format: $remote_addr [$time_local] $request $status $body_bytes_sent $request_time
+    $upstream_addr $upstream_response_time $proxy_host  $upstream_status
+    $ingress_name $namespace $service_name

@@ -1,0 +1,38 @@
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterFilter
+metadata:
+  name: fluent-throttle
+  labels:
+    fluentbit.fluent.io/enabled: "true"
+    fluentbit.fluent.io/component: logging
+spec:
+  match: kube.*
+  filters:
+    - throttle:
+        rate: 800
+        window: 3
+        interval: 10s
+        printStatus: true
+---
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterOutput
+metadata:
+  name: fluent-http
+  labels:
+    fluentbit.fluent.io/enabled: "true"
+    fluentbit.fluent.io/component: logging
+spec:
+  match: kube.*
+  http:
+    host: TENANT_TO_REPLACE
+    uri: /api/v2/logs/ingest
+    port: 443
+    format: json_stream
+    allowDuplicatedHeaders: false
+    jsonDateKey: timestamp
+    jsonDateFormat: iso8601
+    headers:
+      Authorization: Api-Token API_TOKEN_TO_REPLACE
+      Content-Type: application/json; charset=utf-8
+    tls:
+      verify: false
