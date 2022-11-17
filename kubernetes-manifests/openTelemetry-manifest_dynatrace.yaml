@@ -37,7 +37,7 @@ spec:
         num_traces: 1000
 
       spanmetrics:
-        metrics_exporter: dynatrace
+        metrics_exporter: prometheus
 
       memory_limiter:
         check_interval: 1s
@@ -68,14 +68,6 @@ spec:
         headers:
           Authorization: "Api-Token API_TOKEN_TO_REPLACE"
 
-      dynatrace:
-        # optional - Dimensions specified here will be included as a dimension on every exported metric
-        #            unless that metric already has a dimension with the same key.
-        # optional - prefix will be prepended to each metric name in prefix.name format
-        prefix: otel-demo
-        endpoint: https://TENANT_TO_REPLACE/api/v2/metrics/ingest
-        # Token must at least have the Ingest metrics (metrics.ingest) permission
-        api_token: "API_TOKEN_TO_REPLACE"
 
 
       prometheus:
@@ -95,7 +87,7 @@ spec:
         metrics:
           receivers: [otlp]
           processors: [memory_limiter,k8sattributes,batch]
-          exporters: [dynatrace,prometheus]
+          exporters: [prometheus]
         metrics/spanmetrics:
           receivers: [otlp/spanmetrics]
           exporters: [otlp/spanmetrics]
